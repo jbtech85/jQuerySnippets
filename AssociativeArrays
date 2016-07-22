@@ -1,0 +1,42 @@
+        /************************************************************************************************************
+        | This snippet is inside of a totalling loop called each time a new line item is added.  
+        | The line items are added inside of a replicator tool I built, thus each item has all of it's HTML fields
+        | prefaced with "replicator00", "replicator01", etc.
+        | Note: the itemCountArray is defined outside of the current loop.
+        *************************************************************************************************************/
+        
+        // initialize the item count
+        itemCountArray = new Array();
+        var itemCountHTML = '<b><u>Items by Category</u></b>';
+
+        // a loop to check each item category
+        itemCountLoop:
+        for(c = 0; c < 100; c++){
+            if(c < 10){
+                var repCount = "replicator0" + c;
+            } else {
+                var repCount = "replicator" + c;
+            }
+
+            var thisCat = $('#' + repCount + '_CategoryTitle').val();
+
+            // if it isn't undefined
+            if(typeof(thisCat) != 'undefined' && thisCat != ''){
+                // if the categoryFK isn't already in our itemCount array
+                if(typeof(itemCountArray[thisCat]) == 'undefined'){
+                    // then add this as an item in our array and initialize count to 0
+                    itemCountArray[thisCat] = 0;
+                }
+
+                // increase the count of this category based on the quantity of the current item
+                itemCountArray[thisCat] += parseInt($('#' + repCount + '_Quantity').val());
+            }
+        }
+
+
+        // after we've gone through all items, create the HTML output
+        for(var key in itemCountArray){
+            itemCountHTML += '<br>' + key + ': ' + itemCountArray[key];
+        }
+
+        $('#ItemCount_td').html(itemCountHTML);
